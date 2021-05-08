@@ -42,17 +42,40 @@
         v-for="breed in randomBreeds"
     >{{breed.name}}</div>
   </div>
+  <div style="width: 100%" class="container container-lists">
+    <div class="item">
+      <List
+          :data="breeds"
+          :on-click-item="selectBreed"
+          :checked="(name) => selectedBreeds.find((item) => item.name === name)"
+          :color-checked="{backgroundColor: 'blue', color: 'white'}"
+      />
+    </div>
+    <div class="item">
+      <List
+          v-bind:data="selectedBreeds"
+          v-bind:on-click-item="unselectBreed"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
+import List from './List'
+
 export default {
   data() {
     return {
       inputValue: '',
       breeds: [],
       randomBreedVar: [],
-      randomBreeds: []
+      // randomBreeds: [],
+      randomBreeds: [],
+      selectedBreeds: []
     }
+  },
+  components: {
+    List
   },
   methods: {
     convert(data){
@@ -85,6 +108,12 @@ export default {
         ...this.randomBreeds.slice(0, number),
         ...this.randomBreeds.slice(number + 1)
       ];
+    },
+    selectBreed(name) {
+      return this.selectedBreeds = [...this.selectedBreeds, this.breeds.find((item) => item.name === name)];
+    },
+    unselectBreed(name) {
+      return this.selectedBreeds = this.selectedBreeds.filter((item) => item.name !== name);
     }
   },
   computed: {
@@ -105,5 +134,13 @@ export default {
 }
 button {
   margin: 20px;
+}
+.container-lists {
+  display: flex;
+  justify-content: center;
+}
+.item {
+  width: 150px;
+  padding: 20px;
 }
 </style>
